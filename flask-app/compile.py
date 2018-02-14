@@ -11,7 +11,7 @@ def upload_file():
    return render_template('upload.html')
 	
 @app.route('/uploader', methods = ['GET', 'POST'])
-def upload_file():
+def upload():
    if request.method == 'POST':
 		f = request.files['file']
 		f.save(secure_filename(f.filename))
@@ -26,12 +26,18 @@ def upload_file():
 		subprocess.call("rm -f ./output", shell=True) 
 		retcode = subprocess.call("./test.sh", shell=True)
 
-		ouput = "Score: " + str(retcode) + " out of 2 correct."
+		if retcode > 2:
+			retcode = 2
+
+		output = "Score: " + str(retcode) + " out of 2 correct."
 
 		output += "\n*************Original submission*************" 
 		with open('./walk.cc','r') as fs:
 			output += "\n" + fs.read()
 
 		return output + "\n" + 'file uploaded successfully'
+
+if __name__ == '__main__':
+	app.run(host="0.0.0.0", debug = True)
 		
 
