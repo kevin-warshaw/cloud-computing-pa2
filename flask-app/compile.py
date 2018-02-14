@@ -13,10 +13,25 @@ def upload_file():
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
-      f = request.files['file']
-      f.save(secure_filename(f.filename))
-	
-	
-      return 'file uploaded successfully'
+		f = request.files['file']
+		f.save(secure_filename(f.filename))
+
+		subprocess.call("rm -f ./a.out", shell=True)
+		retcode = subprocess.call("/usr/bin/g++ ./walk.cc", shell=True) 
+
+		if retcode:
+			print("failed to compile walk.cc") 
+			exit
+
+		subprocess.call("rm -f ./output", shell=True) 
+		retcode = subprocess.call("./test.sh", shell=True)
+
+		ouput = "Score: " + str(retcode) + " out of 2 correct."
+
+		output += "\n*************Original submission*************" 
+		with open('./walk.cc','r') as fs:
+			output += "\n" + fs.read()
+
+		return output + "\n" + 'file uploaded successfully'
 		
 
