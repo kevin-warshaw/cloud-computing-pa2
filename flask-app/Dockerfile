@@ -5,4 +5,4 @@ FROM python:3-onbuild
 EXPOSE 5000
 
 # run the command
-CMD ["python", "./app.py"]
+CMD ["python", "./compile.py"]
