@@ -13,29 +13,29 @@ def upload_file():
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload():
    if request.method == 'POST':
-		f = request.files['file']
-		f.save(secure_filename(f.filename))
+	f = request.files['file']
+	f.save(secure_filename(f.filename))
 
-		subprocess.call("rm -f ./a.out", shell=True)
-		retcode = subprocess.call("/usr/bin/g++ ./walk.cc", shell=True) 
+	subprocess.call("rm -f ./a.out", shell=True)
+	retcode = subprocess.call("/usr/bin/g++ ./walk.cc", shell=True) 
 
-		if retcode:
-			print("failed to compile walk.cc") 
-			exit
+	if retcode:
+		print("failed to compile walk.cc") 
+		exit
 
-		subprocess.call("rm -f ./output", shell=True) 
-		retcode = subprocess.call("./test.sh", shell=True)
+	subprocess.call("rm -f ./output", shell=True) 
+	retcode = subprocess.call("./test.sh", shell=True)
 
-		if retcode > 2:
-			retcode = 2
+	if retcode > 2:
+		retcode = 2
 
-		output = "Score: " + str(retcode) + " out of 2 correct."
+	output = "Score: " + str(retcode) + " out of 2 correct."
 
-		output += "\n*************Original submission*************" 
-		with open('./walk.cc','r') as fs:
-			output += "\n" + fs.read()
+	output += "\n*************Original submission*************" 
+	with open('./walk.cc','r') as fs:
+		output += "\n" + fs.read()
 
-		return output + "\n" + 'file uploaded successfully'
+	return output + "\n" + 'file uploaded successfully'
 
 if __name__ == '__main__':
 	app.run(host="0.0.0.0", debug = True)
